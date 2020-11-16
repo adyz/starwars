@@ -1,14 +1,8 @@
 const fetch = require('node-fetch');
 exports.handler = async function(event, context, callback) {
-
-    const headers = { 
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-    },
     if(event.queryStringParameters.search === 'FAIL') {
         return {
             statusCode: 500,
-            headers,
             body: JSON.stringify({message: "Error", query: event.queryStringParameters})
         };
     }
@@ -26,7 +20,6 @@ exports.handler = async function(event, context, callback) {
         const data = await checkStatus(response)
         callback(null, {
           statusCode: 200,
-          headers,
           body: JSON.stringify(data)
         })
       } catch (error) {
