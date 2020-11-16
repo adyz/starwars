@@ -1,0 +1,19 @@
+{
+  "name": "starwars",
+  "version": "1.0.0",
+  "description": "A react application that uses https://swapi.dev/ to display Star Wars movies data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adyz/starwars.git"
+  },
+  "author": "Adrian Florescu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adyz/starwars/issues"
+  },
+  "homepage": "https://github.com/adyz/starwars#readme"
+}
