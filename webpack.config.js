@@ -20,7 +20,18 @@ module.exports = {
           }, {
             loader: "sass-loader"
           }]
-    }
+      },
+      {
+        test: /\.(png|jp(e*)g|svg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'src/assets/[hash]-[name].[ext]',
+            },
+          },
+        ],
+      },
     ]
   },
   resolve: { extensions: ["*", ".js", ".jsx"] }, // allows import without file extension
@@ -32,6 +43,7 @@ module.exports = {
     port: 3000,
     contentBase: path.resolve(__dirname, './dist'),
     hot: true,
+    open: true
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

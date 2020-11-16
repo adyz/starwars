@@ -1,11 +1,17 @@
 import React, { Component} from "react";
 import './app.scss'
+import logoSrc from '../assets/logo.svg';
 class App extends Component{
   render(){
     return(
       <div>
-        <h1>Logo</h1>
-        <input type="search" />
+        <a href="/" title="Star Wars Logo">
+          <img src={logoSrc} alt="Star Wars Logo" />
+        </a>
+        <form action="">
+          <input type="search" placeholder="Search for a movie title" />
+          <button>Search</button>
+        </form>
       </div>
     );
   }
