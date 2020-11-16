@@ -7,7 +7,8 @@
     "test": "jest",
     "start": "webpack serve --config ./webpack.config.js --mode development",
     "build": "webpack --mode production",
-    "local-prod": "npm run build && serve dist"
+    "local-prod": "npm run build && serve dist",
+    "lint": "eslint src/**/*.jsx src/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,12 @@
     "@babel/preset-react": "^7.12.1",
     "@testing-library/react": "^11.1.2",
     "babel-loader": "^8.1.0",
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.0",
     "install": "^0.13.0",

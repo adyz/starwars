@@ -1,54 +1,53 @@
-import React, { Component} from "react";
-import './app.scss'
+import React from 'react';
+import './app.scss';
 import logoSrc from '../assets/logo.svg';
+import fetchClient from '../utils/fetch';
 
+function App() {
+  const [query, setQuety] = React.useState('');
 
-function App(){
-  const [query, setQuety] =  React.useState('');
   const [state, setState] = React.useState({
     fetchState: 'idle',
-    data: []
+    data: [],
   });
-
-
   React.useEffect(() => {
-      if(query) {
-        setState({
-          fetchState: 'pending',
-          data: []
-        })
-        
-        fetch(`https://swapi.dev/api/films/?search=${encodeURIComponent(query)}`)
-          .then((data) => data.json())
-          .then((json) => {
-            setState({
-              fetchState: 'fullfilled',
-              data: json
-            })
-          }).catch((e) => {
-            setState({
-              fetchState: 'error',
-              data: []
-            })
-          }) 
-      }
-  }, [query])
-  return(
+    if (query) {
+      setState({
+        fetchState: 'pending',
+        data: [],
+      });
+
+      fetchClient(`https://swapi.dev/api/films/?search=${encodeURIComponent(query)}`)
+        .then((data) => data.json())
+        .then((json) => {
+          setState({
+            fetchState: 'fullfilled',
+            data: json,
+          });
+        }).catch(() => {
+          setState({
+            fetchState: 'error',
+            data: [],
+          });
+        });
+    }
+  }, [query]);
+  return (
     <div>
       <a href="/" title="Star Wars Logo">
         <img src={logoSrc} alt="Star Wars Logo" />
       </a>
       <form action="">
         <input type="search" value={query} onChange={(e) => setQuety(e.target.value)} placeholder="Search for a movie title" />
-        <button>Search</button>
+        <button type="submit">Search</button>
       </form>
 
-      {state?.data?.results?.map((film) => {
-        return <div>
-            <a href="#">{film.title}</a>
-            <p><small>{film.opening_crawl}</small></p>
+      {state?.data?.results?.map((film) => (
+        <div>
+          <a href="#test">{film.title}</a>
+          <p><small>{film.opening_crawl}</small></p>
         </div>
-      })}
+      ))}
     </div>
   );
 }
