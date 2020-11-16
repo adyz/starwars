@@ -1,7 +1,7 @@
 import React from 'react';
 import './app.scss';
 import logoSrc from '../assets/logo.svg';
-import fetchClient from '../utils/fetch';
+import starWarsSearch from '../utils/starWarsApi';
 
 function App() {
   const [query, setQuety] = React.useState('');
@@ -17,7 +17,7 @@ function App() {
         data: [],
       });
 
-      fetchClient(`https://swapi.dev/api/films/?search=${encodeURIComponent(query)}`)
+      starWarsSearch(query)
         .then((data) => data.json())
         .then((json) => {
           setState({
