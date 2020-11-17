@@ -42,7 +42,9 @@ function PageSearch() {
       getSearchData();
     }
     return () => {
-      controller.abort();
+      if (controller) {
+        controller.abort();
+      }
     };
   }, [query]);
 

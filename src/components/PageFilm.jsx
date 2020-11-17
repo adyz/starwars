@@ -8,12 +8,13 @@ function goBack() {
 }
 
 async function getCharacters(characters) {
-  return Promise.all(characters.map(async (url) => {
+  return Promise.all(characters.map((url) => {
     const id = getID(url);
     return new Promise((res, rej) => {
       API.getCharacter(id).then((data) => {
         res(data);
       }).catch((e) => {
+        console.log(e);
         rej(e);
       });
     });
@@ -46,7 +47,7 @@ function PageFilm({ filmId }) {
       } else {
         setState({
           fetchState: 'error',
-          data: {},
+          data: e.message,
         });
       }
     }
@@ -57,7 +58,9 @@ function PageFilm({ filmId }) {
       getFilmData();
     }
     return () => {
-      controller.abort();
+      if (controller) {
+        controller.abort();
+      }
     };
   }, []);
 
@@ -79,6 +82,9 @@ function PageFilm({ filmId }) {
             Loading failed
             {' '}
             <button type="button" onClick={getFilmData}>Retry</button>
+            <pre>
+              {JSON.stringify(state.data)}
+            </pre>
           </p>
         </>
         )}

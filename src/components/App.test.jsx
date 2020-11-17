@@ -7,6 +7,6 @@ import App from './App';
 
 it('Works', () => {
   const { getAllByText } = render(<App />);
-  const header = getAllByText(/star wars/i);
+  const header = getAllByText(/search engine/i);
   expect(header).toBeTruthy();
 });

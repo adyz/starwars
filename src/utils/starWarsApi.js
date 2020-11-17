@@ -16,7 +16,7 @@ export function baseFetch(url, config = {}) {
         if (res.status >= 200 && res.status <= 299) {
           return res.json();
         }
-        throw Error(res.statusText);
+        throw Error(res);
       })
       .then((json) => resolve(json))
       .catch((error) => {
@@ -51,6 +51,7 @@ export function starWarsApi() {
     getCharacter: (id) => {
       const URL = `${BASE_URL}/people`;
       const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
+      console.log({ filnalUlr });
       return baseFetch(filnalUlr);
     },
   };
