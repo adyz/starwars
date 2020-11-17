@@ -1,34 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from '@reach/router';
 
-import API from '../utils/starWarsApi';
+import useSearchQuery from './cutomHooks/userSearchQuery';
+import API, { getID, controller } from '../utils/starWarsApi';
+
 import IconSearch from '../assets/search.svg';
 
-function useSearchQuery(initialValue = '') {
-  const [query, setQuety] = React.useState(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const search = urlParams.get('search');
-    return search || initialValue;
-  });
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('search', query);
-    const newRelativePathQuery = `${window.location.pathname}?${urlParams.toString()}`;
-    window.history.replaceState(false, false, newRelativePathQuery);
-  }, [query]);
-
-  return [query, setQuety];
-}
-
 function PageSearch() {
-  const [query, setQuety] = useSearchQuery('');
+  const [query, setQuery] = useSearchQuery('');
   const [state, setState] = React.useState({
     fetchState: 'idle',
     data: [],
   });
 
-  function fetchSearchResults() {
+  function getSearchData() {
     setState({
       fetchState: 'pending',
       data: [],
@@ -41,18 +26,24 @@ function PageSearch() {
           data: json,
         });
       }).catch((e) => {
-        console.log(e);
-        setState({
-          fetchState: 'error',
-          data: [],
-        });
+        if (e.name === 'AbortError') {
+          console.log('Aborted');
+        } else {
+          setState({
+            fetchState: 'error',
+            data: [],
+          });
+        }
       });
   }
 
   React.useEffect(() => {
     if (query) {
-      fetchSearchResults();
+      getSearchData();
     }
+    return () => {
+      controller.abort();
+    };
   }, [query]);
 
   return (
@@ -65,7 +56,7 @@ function PageSearch() {
           className="searchForm__input"
           type="search"
           value={query}
-          onChange={(e) => setQuety(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for a movie title"
         />
       </form>
@@ -81,7 +72,7 @@ function PageSearch() {
         <p className="searchResults__error">
           Error showing search resuls
           {' '}
-          <button onClick={fetchSearchResults} type="button">Retry</button>
+          <button onClick={getSearchData} type="button">Retry</button>
         </p>
         )}
 
@@ -93,8 +84,7 @@ function PageSearch() {
         </p>
         )}
         {query && state?.data?.results?.map((film) => {
-          const urlSplit = film.url.split('/');
-          const filmId = urlSplit[urlSplit.length - 2];
+          const filmId = getID(film.url);
           return <Link key={film.title} to={`/film/${filmId}`} className="searchResults__item" href="#test">{film.title}</Link>;
         })}
       </div>

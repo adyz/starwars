@@ -1,9 +1,16 @@
-function baseFetch(url, config = {}) {
+// eslint-disable-next-line import/no-mutable-exports
+let controller;
+let signal;
+
+export function baseFetch(url, config = {}) {
+  controller = new AbortController();
+  signal = controller.signal;
   const newConf = {
     method: 'GET',
+    signal,
     ...config,
   };
-  return new Promise((resolve, reject) => {
+  const promise = new Promise((resolve, reject) => {
     fetch(url, newConf)
       .then((res) => {
         if (res.status >= 200 && res.status <= 299) {
@@ -20,11 +27,16 @@ function baseFetch(url, config = {}) {
         }
       });
   });
+  return promise;
 }
 
-function starWarsApi() {
-  const BASE_URL = 'https://swapi.dev/api';
+export function getID(url) {
+  const urlSplit = url.split('/');
+  return urlSplit[urlSplit.length - 2];
+}
 
+export function starWarsApi() {
+  const BASE_URL = 'https://swapi.dev/api';
   return {
     searchFilm: (query) => {
       const URL = `${BASE_URL}/films/?search=`;
@@ -45,4 +57,7 @@ function starWarsApi() {
 }
 
 const API = starWarsApi();
+export {
+  controller,
+};
 export default API;

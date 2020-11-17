@@ -1,15 +1,10 @@
 import React from 'react';
 import { navigate } from '@reach/router';
-import API from '../utils/starWarsApi';
+import API, { getID, controller } from '../utils/starWarsApi';
 import IconBack from '../assets/back.svg';
 
 function goBack() {
   navigate(-1);
-}
-
-function getID(url) {
-  const urlSplit = url.split('/');
-  return urlSplit[urlSplit.length - 2];
 }
 
 async function getCharacters(characters) {
@@ -46,19 +41,24 @@ function PageFilm({ filmId }) {
         data: { ...filmData, characters },
       });
     } catch (e) {
-      setState({
-        fetchState: 'error',
-        data: {},
-      });
+      if (e.name === 'AbortError') {
+        console.log('Aborted');
+      } else {
+        setState({
+          fetchState: 'error',
+          data: {},
+        });
+      }
     }
   }
 
   React.useEffect(() => {
-    console.log('Here');
     if (filmId) {
-      console.log('filmId');
       getFilmData();
     }
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
