@@ -1,39 +1,11 @@
 import React from 'react';
 import './app.scss';
+import { Router } from '@reach/router';
 import Logo from '../assets/logo_wide.svg';
-
-import starWarsSearch from '../utils/starWarsApi';
-import IconSearch from '../assets/search.svg';
+import PageSearch from './PageSearch';
+import PageFilm from './PageFilm';
 
 function App() {
-  const [query, setQuety] = React.useState('');
-
-  const [state, setState] = React.useState({
-    fetchState: 'idle',
-    data: [],
-  });
-  React.useEffect(() => {
-    if (query) {
-      setState({
-        fetchState: 'pending',
-        data: [],
-      });
-
-      starWarsSearch(query)
-        .then((data) => data.json())
-        .then((json) => {
-          setState({
-            fetchState: 'fullfilled',
-            data: json,
-          });
-        }).catch(() => {
-          setState({
-            fetchState: 'error',
-            data: [],
-          });
-        });
-    }
-  }, [query]);
   return (
     <div className="wrapper">
 
@@ -43,27 +15,10 @@ function App() {
           <span className="logo__text">Search Engine</span>
         </a>
       </header>
-
-      <div className="search">
-        <form className="searchForm" action="">
-          <button className="searchForm__icon" type="submit">
-            <IconSearch />
-          </button>
-          <input
-            className="searchForm__input"
-            type="search"
-            value={query}
-            onChange={(e) => setQuety(e.target.value)}
-            placeholder="Search for a movie title"
-          />
-        </form>
-
-        <div className="searchResults">
-          {state?.data?.results?.map((film) => (
-            <a className="searchResults__item" href="#test">{film.title}</a>
-          ))}
-        </div>
-      </div>
+      <Router>
+        <PageSearch path="/" />
+        <PageFilm path="film/:filmId" />
+      </Router>
 
     </div>
   );

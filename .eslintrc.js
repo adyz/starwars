@@ -20,5 +20,6 @@ module.exports = {
   ],
   rules: {
     'no-console': 'off',
+    'react/prop-types': ['warn', { ignore: ['children'] }],
   },
 };
