@@ -30,6 +30,7 @@ module.exports = {
   resolve: { extensions: ['*', '.js', '.jsx'] }, // allows import without file extension
   output: {
     path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
     filename: 'bundle.js',
   },
   devServer: {
@@ -37,6 +38,9 @@ module.exports = {
     contentBase: path.resolve(__dirname, './dist'),
     hot: true,
     open: true,
+    historyApiFallback: {
+      index: 'index.html',
+    },
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
