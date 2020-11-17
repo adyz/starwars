@@ -1,5 +1,6 @@
 function starWarsApi() {
   const BASE_URL = 'https://swapi.dev/api';
+
   return {
     searchFilm: (query, config) => {
       const URL = `${BASE_URL}/films/?search=`;
@@ -16,7 +17,15 @@ function starWarsApi() {
         ...config,
       };
       const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
-      console.log('filnalUlr', filnalUlr);
+      return fetch(filnalUlr, newConf);
+    },
+    getCharacter: (id, config) => {
+      const URL = `${BASE_URL}/people`;
+      const newConf = {
+        method: 'GET',
+        ...config,
+      };
+      const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
       return fetch(filnalUlr, newConf);
     },
   };

@@ -125,6 +125,7 @@ $searchRadius: 1.5rem;
         border-radius: $searchRadius;
         padding: 1rem 1.5rem;
         text-align: left;
+        line-height: 1.4;
     }
 
     .filmTitle {
@@ -133,7 +134,6 @@ $searchRadius: 1.5rem;
 
     .filmCrawl {
         color: var(--colorBrand);
-        line-height: 1.4;
     }
 
     .filmDetails {

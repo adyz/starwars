@@ -7,6 +7,18 @@ function goBack() {
   navigate(-1);
 }
 
+function getID(url) {
+  const urlSplit = url.split('/');
+  return urlSplit[urlSplit.length - 2];
+}
+
+async function getCharacters(characters) {
+  return Promise.all(characters.map(async (url) => {
+    const id = getID(url);
+    return API.getCharacter(id).then((res) => res.json());
+  }));
+}
+
 // eslint-disable-next-line react/prop-types
 function PageFilm({ filmId }) {
   const [state, setState] = React.useState({
@@ -22,11 +34,20 @@ function PageFilm({ filmId }) {
 
     API.getFilm(filmId)
       .then((data) => data.json())
-      .then((json) => {
-        setState({
-          fetchState: 'fulfilled',
-          data: json,
-        });
+      .then(async (json) => {
+        console.log('done', { json });
+        if (json.characters.length > 0) {
+          const characters = await getCharacters(json.characters);
+          setState({
+            fetchState: 'fulfilled',
+            data: { ...json, characters },
+          });
+        } else {
+          setState({
+            fetchState: 'fulfilled',
+            data: json,
+          });
+        }
       }).catch(() => {
         setState({
           fetchState: 'error',
@@ -38,6 +59,7 @@ function PageFilm({ filmId }) {
   React.useEffect(() => {
     console.log('Here');
     if (filmId) {
+      console.log('filmId');
       getFilmData();
     }
   }, []);
@@ -68,12 +90,16 @@ function PageFilm({ filmId }) {
           <h1 className="filmTitle">{state.data.title}</h1>
           <p className="filmCrawl">{state.data.opening_crawl}</p>
           <p className="filmDetails">
-            Director:
+            <strong>Director: </strong>
             {state.data.director}
           </p>
           <p className="filmDetails">
-            Release date:
+            <strong>Release date: </strong>
             {state.data.release_date}
+          </p>
+          <p className="filmDetails">
+            <strong>Characters: </strong>
+            {state.data.characters.map((character) => <span>{character.name}</span>)}
           </p>
         </>
         )}
