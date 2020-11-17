@@ -1,5 +1,6 @@
 const starWarsSearch = (query, config) => {
-  const URL = `https://vigilant-lichterman-be0b05.netlify.app/.netlify/functions/starwars/?search=`
+  // const URL = `//vigilant-lichterman-be0b05.netlify.app/.netlify/functions/starwars/?search=`
+  const URL = 'https://swapi.dev/api/films/?search=';
   const newConf = {
     method: 'GET',
     ...config,

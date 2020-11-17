@@ -22,15 +22,8 @@ module.exports = {
         }],
       },
       {
-        test: /\.(png|jp(e*)g|svg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: 'src/assets/[hash]-[name].[ext]',
-            },
-          },
-        ],
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
       },
     ],
   },

@@ -1,7 +1,9 @@
 import React from 'react';
 import './app.scss';
-import logoSrc from '../assets/logo.svg';
+import Logo from '../assets/logo_wide.svg';
+
 import starWarsSearch from '../utils/starWarsApi';
+import IconSearch from '../assets/search.svg';
 
 function App() {
   const [query, setQuety] = React.useState('');
@@ -33,21 +35,36 @@ function App() {
     }
   }, [query]);
   return (
-    <div>
-      <a href="/" title="Star Wars Logo">
-        <img src={logoSrc} alt="Star Wars Logo" />
-      </a>
-      <form action="">
-        <input type="search" value={query} onChange={(e) => setQuety(e.target.value)} placeholder="Search for a movie title" />
-        <button type="submit">Search</button>
-      </form>
+    <div className="wrapper">
 
-      {state?.data?.results?.map((film) => (
-        <div>
-          <a href="#test">{film.title}</a>
-          <p><small>{film.opening_crawl}</small></p>
+      <header>
+        <a className="logo" href="/" title="Star Wars Logo">
+          <span className="logo__svg"><Logo /></span>
+          <span className="logo__text">Search Engine</span>
+        </a>
+      </header>
+
+      <div className="search">
+        <form className="searchForm" action="">
+          <button className="searchForm__icon" type="submit">
+            <IconSearch />
+          </button>
+          <input
+            className="searchForm__input"
+            type="search"
+            value={query}
+            onChange={(e) => setQuety(e.target.value)}
+            placeholder="Search for a movie title"
+          />
+        </form>
+
+        <div className="searchResults">
+          {state?.data?.results?.map((film) => (
+            <a className="searchResults__item" href="#test">{film.title}</a>
+          ))}
         </div>
-      ))}
+      </div>
+
     </div>
   );
 }
