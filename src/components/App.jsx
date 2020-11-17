@@ -1,6 +1,6 @@
 import React from 'react';
 import './app.scss';
-import { Router } from '@reach/router';
+import { Router, Link } from '@reach/router';
 import Logo from '../assets/logo_wide.svg';
 import PageSearch from './PageSearch';
 import PageFilm from './PageFilm';
@@ -9,10 +9,10 @@ function App() {
   return (
     <div className="wrapper">
       <header>
-        <a className="logo" href="/" title="Star Wars Logo">
+        <Link className="logo" to="/" title="Star Wars Logo">
           <span className="logo__svg"><Logo /></span>
           <span className="logo__text">Search Engine</span>
-        </a>
+        </Link>
       </header>
       <Router>
         <PageSearch path="/" />
