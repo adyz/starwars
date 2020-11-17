@@ -15,7 +15,9 @@ function starWarsApi() {
         method: 'GET',
         ...config,
       };
-      return fetch(`${URL}/${encodeURIComponent(id)}`, newConf);
+      const filnalUlr = `${URL}/${encodeURIComponent(id)}`;
+      console.log('filnalUlr', filnalUlr);
+      return fetch(filnalUlr, newConf);
     },
   };
 }
