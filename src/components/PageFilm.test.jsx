@@ -16,7 +16,7 @@ const server = setupServer(
     release_date: '1980-05-17',
     characters: ['http://swapi.dev/api/people/1/'],
   }))),
-  rest.get('https://swapi.dev/api/peaaople/1/', (req, res, ctx) => res(ctx.json({
+  rest.get('https://swapi.dev/api/people/1/', (req, res, ctx) => res(ctx.json({
     name: 'IG-88',
   }))),
 );
@@ -25,8 +25,17 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-it('Starts with a loading screen', async () => {
+it('Loads and renders film data', async () => {
   const { getByText } = render(<PageFilm filmId="1" />);
   await waitFor(() => getByText('Loading...'));
   await waitFor(() => getByText(/test title/ig));
+});
+
+it('Renders error', async () => {
+  server.use(
+    rest.get('https://swapi.dev/api/films/1/', (req, res, ctx) => res(ctx.status(500))),
+  );
+  const { getByText } = render(<PageFilm filmId="1" />);
+  await waitFor(() => getByText('Loading...'));
+  await waitFor(() => getByText(/loading failed/ig));
 });

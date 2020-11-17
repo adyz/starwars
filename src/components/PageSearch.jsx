@@ -40,13 +40,22 @@ function PageSearch() {
   React.useEffect(() => {
     if (query) {
       getSearchData();
-    }
-    return () => {
+    } else {
       if (controller) {
         controller.abort();
       }
-    };
+      setState({
+        fetchState: 'idle',
+        data: [],
+      });
+    }
   }, [query]);
+
+  React.useEffect(() => () => {
+    if (controller) {
+      controller.abort();
+    }
+  }, []);
 
   return (
     <div className="pageSearch">

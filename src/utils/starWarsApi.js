@@ -51,7 +51,6 @@ export function starWarsApi() {
     getCharacter: (id) => {
       const URL = `${BASE_URL}/people`;
       const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
-      console.log({ filnalUlr });
       return baseFetch(filnalUlr);
     },
   };

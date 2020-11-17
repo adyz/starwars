@@ -14,7 +14,6 @@ async function getCharacters(characters) {
       API.getCharacter(id).then((data) => {
         res(data);
       }).catch((e) => {
-        console.log(e);
         rej(e);
       });
     });
@@ -82,9 +81,6 @@ function PageFilm({ filmId }) {
             Loading failed
             {' '}
             <button type="button" onClick={getFilmData}>Retry</button>
-            <pre>
-              {JSON.stringify(state.data)}
-            </pre>
           </p>
         </>
         )}

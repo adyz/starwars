@@ -123,7 +123,9 @@ $searchRadius: 1.5rem;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        gap: .3rem;
+        svg {
+            margin-right: 1rem;
+        }
     }
 
     .filmContent {
