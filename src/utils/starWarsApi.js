@@ -1,5 +1,5 @@
 function starWarsApi() {
-  const BASE_URL = 'https://swapi.dev/api';
+  const BASE_URL = '//swapi.dev/api';
   return {
     searchFilm: (query, config) => {
       const URL = `${BASE_URL}/films/?search=`;
