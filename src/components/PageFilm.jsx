@@ -15,7 +15,13 @@ function getID(url) {
 async function getCharacters(characters) {
   return Promise.all(characters.map(async (url) => {
     const id = getID(url);
-    return API.getCharacter(id).then((res) => res.json());
+    return new Promise((res, rej) => {
+      API.getCharacter(id).then((data) => {
+        res(data);
+      }).catch((e) => {
+        rej(e);
+      });
+    });
   }));
 }
 
@@ -26,34 +32,25 @@ function PageFilm({ filmId }) {
     data: [],
   });
 
-  function getFilmData() {
+  async function getFilmData() {
     setState({
       fetchState: 'pending',
       data: [],
     });
 
-    API.getFilm(filmId)
-      .then((data) => data.json())
-      .then(async (json) => {
-        console.log('done', { json });
-        if (json.characters.length > 0) {
-          const characters = await getCharacters(json.characters);
-          setState({
-            fetchState: 'fulfilled',
-            data: { ...json, characters },
-          });
-        } else {
-          setState({
-            fetchState: 'fulfilled',
-            data: json,
-          });
-        }
-      }).catch(() => {
-        setState({
-          fetchState: 'error',
-          data: [],
-        });
+    try {
+      const filmData = await API.getFilm(filmId);
+      const characters = await getCharacters(filmData.characters);
+      setState({
+        fetchState: 'fulfilled',
+        data: { ...filmData, characters },
       });
+    } catch (e) {
+      setState({
+        fetchState: 'error',
+        data: {},
+      });
+    }
   }
 
   React.useEffect(() => {
@@ -99,7 +96,15 @@ function PageFilm({ filmId }) {
           </p>
           <p className="filmDetails">
             <strong>Characters: </strong>
-            {state.data.characters.map((character) => <span>{character.name}</span>)}
+            {state.data.characters.map(
+              (character, index) => (
+                <span key={character.name}>
+                  {character.name}
+                  {state.data.characters.length - 1 === index ? '' : ','}
+                  {' '}
+                </span>
+              ),
+            )}
           </p>
         </>
         )}

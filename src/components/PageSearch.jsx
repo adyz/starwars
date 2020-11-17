@@ -23,33 +23,38 @@ function useSearchQuery(initialValue = '') {
 
 function PageSearch() {
   const [query, setQuety] = useSearchQuery('');
-
   const [state, setState] = React.useState({
     fetchState: 'idle',
     data: [],
   });
+
+  function fetchSearchResults() {
+    setState({
+      fetchState: 'pending',
+      data: [],
+    });
+
+    API.searchFilm(query)
+      .then((json) => {
+        setState({
+          fetchState: 'fullfilled',
+          data: json,
+        });
+      }).catch((e) => {
+        console.log(e);
+        setState({
+          fetchState: 'error',
+          data: [],
+        });
+      });
+  }
+
   React.useEffect(() => {
     if (query) {
-      setState({
-        fetchState: 'pending',
-        data: [],
-      });
-
-      API.searchFilm(query)
-        .then((data) => data.json())
-        .then((json) => {
-          setState({
-            fetchState: 'fullfilled',
-            data: json,
-          });
-        }).catch(() => {
-          setState({
-            fetchState: 'error',
-            data: [],
-          });
-        });
+      fetchSearchResults();
     }
   }, [query]);
+
   return (
     <div className="pageSearch">
       <form className="searchForm" action="">
@@ -66,7 +71,28 @@ function PageSearch() {
       </form>
 
       <div className="searchResults">
-        {state?.data?.results?.map((film) => {
+        {state.fetchState === 'pending' && (
+        <p className="searchResults__loading">
+          Searching...
+        </p>
+        )}
+
+        {state.fetchState === 'error' && (
+        <p className="searchResults__error">
+          Error showing search resuls
+          {' '}
+          <button onClick={fetchSearchResults} type="button">Retry</button>
+        </p>
+        )}
+
+        {query && state?.data?.results?.length === 0 && (
+        <p className="searchResults__empty">
+          No resuls found for
+          {' '}
+          <strong>{query}</strong>
+        </p>
+        )}
+        {query && state?.data?.results?.map((film) => {
           const urlSplit = film.url.split('/');
           const filmId = urlSplit[urlSplit.length - 2];
           return <Link key={film.title} to={`/film/${filmId}`} className="searchResults__item" href="#test">{film.title}</Link>;

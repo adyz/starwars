@@ -1,32 +1,45 @@
+function baseFetch(url, config = {}) {
+  const newConf = {
+    method: 'GET',
+    ...config,
+  };
+  return new Promise((resolve, reject) => {
+    fetch(url, newConf)
+      .then((res) => {
+        if (res.status >= 200 && res.status <= 299) {
+          return res.json();
+        }
+        throw Error(res.statusText);
+      })
+      .then((json) => resolve(json))
+      .catch((error) => {
+        try {
+          reject(JSON.parse(error));
+        } catch (e) {
+          reject(error);
+        }
+      });
+  });
+}
+
 function starWarsApi() {
   const BASE_URL = 'https://swapi.dev/api';
 
   return {
-    searchFilm: (query, config) => {
+    searchFilm: (query) => {
       const URL = `${BASE_URL}/films/?search=`;
-      const newConf = {
-        method: 'GET',
-        ...config,
-      };
-      return fetch(`${URL}${encodeURIComponent(query)}`, newConf);
+      const finalUrl = `${URL}${encodeURIComponent(query)}`;
+      return baseFetch(finalUrl);
     },
-    getFilm: (id, config) => {
+    getFilm: (id) => {
       const URL = `${BASE_URL}/films`;
-      const newConf = {
-        method: 'GET',
-        ...config,
-      };
       const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
-      return fetch(filnalUlr, newConf);
+      return baseFetch(filnalUlr);
     },
-    getCharacter: (id, config) => {
+    getCharacter: (id) => {
       const URL = `${BASE_URL}/people`;
-      const newConf = {
-        method: 'GET',
-        ...config,
-      };
       const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
-      return fetch(filnalUlr, newConf);
+      return baseFetch(filnalUlr);
     },
   };
 }

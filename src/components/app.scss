@@ -83,6 +83,10 @@ $searchRadius: 1.5rem;
         &:empty {
             padding:0;
         }
+
+        &__empty, &__loading, &__error {
+            padding: 1rem;
+        }
     
         &__item {
             padding: 1rem;
