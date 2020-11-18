@@ -46,11 +46,11 @@ function apiURLs() {
     },
     film: (id) => {
       const URL = `${BASE}/films`;
-      return `${URL}/${encodeURIComponent(id)}`;
+      return `${URL}/${encodeURIComponent(id)}/`;
     },
     character: (id) => {
       const URL = `${BASE}/people`;
-      return `${URL}/${encodeURIComponent(id)}`;
+      return `${URL}/${encodeURIComponent(id)}/`;
     },
   };
 }
