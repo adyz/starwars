@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from '@reach/router';
 
 import useSearchQuery from './cutomHooks/userSearchQuery';
+import useDebounce from './cutomHooks/useDebounce';
 import API, { getID, controller } from '../utils/starWarsApi';
 
 import IconSearch from '../assets/search.svg';
@@ -12,6 +13,8 @@ function PageSearch() {
     fetchState: 'idle',
     data: [],
   });
+
+  const debouncedQuery = useDebounce(query, 200);
 
   function getSearchData() {
     setState({
@@ -38,18 +41,18 @@ function PageSearch() {
   }
 
   React.useEffect(() => {
+    if (controller) {
+      controller.abort();
+    }
     if (query) {
       getSearchData();
     } else {
-      if (controller) {
-        controller.abort();
-      }
       setState({
         fetchState: 'idle',
         data: [],
       });
     }
-  }, [query]);
+  }, [debouncedQuery]);
 
   React.useEffect(() => () => {
     if (controller) {
