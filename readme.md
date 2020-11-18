@@ -1,5 +1,8 @@
 # A Star Wars movie search UI
 
+[![codecov](https://codecov.io/gh/adyz/starwars/branch/master/graph/badge.svg?token=igZ6FJi6HX)](https://codecov.io/gh/adyz/starwars)
+
+
 A react application that uses https://swapi.dev/ to display Star Wars movies data.
 
 
