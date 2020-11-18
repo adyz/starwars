@@ -6,10 +6,13 @@ import {
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
+import { apiURLs } from '../utils/starWarsApi';
 import PageFilm from './PageFilm';
 
+const urls = apiURLs();
+
 const server = setupServer(
-  rest.get('https://swapi.dev/api/films/1/', (req, res, ctx) => res(ctx.json({
+  rest.get(urls.film('1'), (req, res, ctx) => res(ctx.json({
     title: 'Test title',
     opening_crawl: 'It is a dark time',
     director: 'Irvin Kershner',
@@ -33,7 +36,7 @@ it('Loads and renders film data', async () => {
 
 it('Renders error', async () => {
   server.use(
-    rest.get('https://swapi.dev/api/films/1/', (req, res, ctx) => res(ctx.status(500))),
+    rest.get(urls.film('1'), (req, res, ctx) => res(ctx.status(500))),
   );
   const { getByText } = render(<PageFilm filmId="1" />);
   await waitFor(() => getByText('Loading...'));

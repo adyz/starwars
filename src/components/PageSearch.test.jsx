@@ -7,10 +7,13 @@ import {
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
+import { apiURLs } from '../utils/starWarsApi';
 import PageSearch from './PageSearch';
 
+const urls = apiURLs();
+
 const server = setupServer(
-  rest.get('https://swapi.dev/api/films/', (req, res, ctx) => res(ctx.json({
+  rest.get(urls.search('a'), (req, res, ctx) => res(ctx.json({
     count: 4,
     next: null,
     previous: null,
@@ -40,7 +43,7 @@ it('Renders items when search', async () => {
 
 it('Renders error', async () => {
   server.use(
-    rest.get('https://swapi.dev/api/films/', (req, res, ctx) => res(ctx.status(500))),
+    rest.get(urls.search('a'), (req, res, ctx) => res(ctx.status(500))),
   );
   const { getByPlaceholderText, getByText } = render(<PageSearch />);
   const searchInput = getByPlaceholderText('Search for a movie title');
@@ -50,7 +53,7 @@ it('Renders error', async () => {
 
 it('Renders empty if no resuls returned from server', async () => {
   server.use(
-    rest.get('https://swapi.dev/api/films/', (req, res, ctx) => res(ctx.json({
+    rest.get(urls.search('a'), (req, res, ctx) => res(ctx.json({
       count: 0,
       next: null,
       previous: null,

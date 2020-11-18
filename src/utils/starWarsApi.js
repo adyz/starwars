@@ -35,29 +35,38 @@ export function getID(url) {
   return urlSplit[urlSplit.length - 2];
 }
 
-export function starWarsApi() {
-  const BASE_URL = 'https://swapi.dev/api';
+function apiURLs() {
+  const BASE = 'https://swapi.dev/api';
+
   return {
-    searchFilm: (query) => {
-      const URL = `${BASE_URL}/films/?search=`;
-      const finalUrl = `${URL}${encodeURIComponent(query)}`;
-      return baseFetch(finalUrl);
+    base: BASE,
+    search: (q) => {
+      const URL = `${BASE}/films/?search=`;
+      return `${URL}${encodeURIComponent(q)}`;
     },
-    getFilm: (id) => {
-      const URL = `${BASE_URL}/films`;
-      const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
-      return baseFetch(filnalUlr);
+    film: (id) => {
+      const URL = `${BASE}/films`;
+      return `${URL}/${encodeURIComponent(id)}`;
     },
-    getCharacter: (id) => {
-      const URL = `${BASE_URL}/people`;
-      const filnalUlr = `${URL}/${encodeURIComponent(id)}/`;
-      return baseFetch(filnalUlr);
+    character: (id) => {
+      const URL = `${BASE}/people`;
+      return `${URL}/${encodeURIComponent(id)}`;
     },
+  };
+}
+
+export function starWarsApi() {
+  const urls = apiURLs();
+  return {
+    searchFilm: (query) => baseFetch(urls.search(query)),
+    getFilm: (id) => baseFetch(urls.film(id)),
+    getCharacter: (id) => baseFetch(urls.character(id)),
   };
 }
 
 const API = starWarsApi();
 export {
   controller,
+  apiURLs,
 };
 export default API;
