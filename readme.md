@@ -16,6 +16,6 @@ Clone this project, cd into it and run `npm i`. Once this is done you'll be able
 If you want to see the minified and bundled version of the app locally you can run `npm run local-prod`
 
 ## Run tests
-If you want to make a PR on this project, or just want to see the test coverage on this app you can run `npm t` or `npm run testCoverage`
+If you want to make a PR on this project, or just want to see the test coverage on this app you can run `npm t` or `npm run testCoverage`. You can also see the coverage here: https://codecov.io/gh/adyz/starwars
 
 
