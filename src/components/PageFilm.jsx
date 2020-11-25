@@ -27,32 +27,32 @@ function PageFilm({ filmId }) {
     data: [],
   });
 
-  async function getFilmData() {
-    setState({
-      fetchState: 'pending',
-      data: [],
-    });
-
-    try {
-      const filmData = await API.getFilm(filmId);
-      const characters = await getCharacters(filmData.characters);
+  React.useEffect(() => {
+    async function getFilmData() {
       setState({
-        fetchState: 'fulfilled',
-        data: { ...filmData, characters },
+        fetchState: 'pending',
+        data: [],
       });
-    } catch (e) {
-      if (e.name === 'AbortError') {
-        console.log('Aborted');
-      } else {
+
+      try {
+        const filmData = await API.getFilm(filmId);
+        const characters = await getCharacters(filmData.characters);
         setState({
-          fetchState: 'error',
-          data: e.message,
+          fetchState: 'fulfilled',
+          data: { ...filmData, characters },
         });
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          console.log('Aborted');
+        } else {
+          setState({
+            fetchState: 'error',
+            data: e.message,
+          });
+        }
       }
     }
-  }
 
-  React.useEffect(() => {
     if (filmId) {
       getFilmData();
     }
@@ -61,7 +61,7 @@ function PageFilm({ filmId }) {
         controller.abort();
       }
     };
-  }, []);
+  }, [filmId]);
 
   return (
     <div className="pageFilm">

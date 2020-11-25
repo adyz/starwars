@@ -16,36 +16,32 @@ function PageSearch() {
 
   const debouncedQuery = useDebounce(query, 200);
 
-  function getSearchData() {
-    setState({
-      fetchState: 'pending',
-      data: [],
-    });
-
-    API.searchFilm(query)
-      .then((json) => {
-        setState({
-          fetchState: 'fullfilled',
-          data: json,
-        });
-      }).catch((e) => {
-        if (e.name === 'AbortError') {
-          console.log('Aborted');
-        } else {
-          setState({
-            fetchState: 'error',
-            data: [],
-          });
-        }
-      });
-  }
-
   React.useEffect(() => {
     if (controller) {
       controller.abort();
     }
-    if (query) {
-      getSearchData();
+    if (debouncedQuery) {
+      setState({
+        fetchState: 'pending',
+        data: [],
+      });
+
+      API.searchFilm(debouncedQuery)
+        .then((json) => {
+          setState({
+            fetchState: 'fullfilled',
+            data: json,
+          });
+        }).catch((e) => {
+          if (e.name === 'AbortError') {
+            console.log('Aborted');
+          } else {
+            setState({
+              fetchState: 'error',
+              data: [],
+            });
+          }
+        });
     } else {
       setState({
         fetchState: 'idle',
