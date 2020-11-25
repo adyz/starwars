@@ -27,32 +27,32 @@ function PageFilm({ filmId }) {
     data: [],
   });
 
-  React.useEffect(() => {
-    async function getFilmData() {
-      setState({
-        fetchState: 'pending',
-        data: [],
-      });
+  const getFilmData = React.useCallback(async () => {
+    setState({
+      fetchState: 'pending',
+      data: [],
+    });
 
-      try {
-        const filmData = await API.getFilm(filmId);
-        const characters = await getCharacters(filmData.characters);
+    try {
+      const filmData = await API.getFilm(filmId);
+      const characters = await getCharacters(filmData.characters);
+      setState({
+        fetchState: 'fulfilled',
+        data: { ...filmData, characters },
+      });
+    } catch (e) {
+      if (e.name === 'AbortError') {
+        console.log('Aborted');
+      } else {
         setState({
-          fetchState: 'fulfilled',
-          data: { ...filmData, characters },
+          fetchState: 'error',
+          data: e.message,
         });
-      } catch (e) {
-        if (e.name === 'AbortError') {
-          console.log('Aborted');
-        } else {
-          setState({
-            fetchState: 'error',
-            data: e.message,
-          });
-        }
       }
     }
+  }, [filmId]);
 
+  React.useEffect(() => {
     if (filmId) {
       getFilmData();
     }
@@ -61,7 +61,7 @@ function PageFilm({ filmId }) {
         controller.abort();
       }
     };
-  }, [filmId]);
+  }, [filmId, getFilmData]);
 
   return (
     <div className="pageFilm">

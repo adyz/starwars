@@ -16,39 +16,43 @@ function PageSearch() {
 
   const debouncedQuery = useDebounce(query, 200);
 
+  const getSearchData = React.useCallback(() => {
+    setState({
+      fetchState: 'pending',
+      data: [],
+    });
+
+    API.searchFilm(debouncedQuery)
+      .then((json) => {
+        setState({
+          fetchState: 'fullfilled',
+          data: json,
+        });
+      }).catch((e) => {
+        if (e.name === 'AbortError') {
+          console.log('Aborted');
+        } else {
+          setState({
+            fetchState: 'error',
+            data: [],
+          });
+        }
+      });
+  }, [debouncedQuery]);
+
   React.useEffect(() => {
     if (controller) {
       controller.abort();
     }
     if (debouncedQuery) {
-      setState({
-        fetchState: 'pending',
-        data: [],
-      });
-
-      API.searchFilm(debouncedQuery)
-        .then((json) => {
-          setState({
-            fetchState: 'fullfilled',
-            data: json,
-          });
-        }).catch((e) => {
-          if (e.name === 'AbortError') {
-            console.log('Aborted');
-          } else {
-            setState({
-              fetchState: 'error',
-              data: [],
-            });
-          }
-        });
+      getSearchData();
     } else {
       setState({
         fetchState: 'idle',
         data: [],
       });
     }
-  }, [debouncedQuery]);
+  }, [getSearchData, debouncedQuery]);
 
   React.useEffect(() => () => {
     if (controller) {
