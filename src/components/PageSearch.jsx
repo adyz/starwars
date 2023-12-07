@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from '@reach/router';
 
+import { Link } from 'react-router-dom';
 import useSearchQuery from './cutomHooks/userSearchQuery';
 import useDebounce from './cutomHooks/useDebounce';
 import API, { getID, controller } from '../utils/starWarsApi';
@@ -63,7 +63,7 @@ function PageSearch() {
   return (
     <div className="pageSearch">
       <form className="searchForm" action="">
-        <button className="searchForm__icon" type="submit">
+        <button aria-label="Search" className="searchForm__icon" type="submit">
           <IconSearch />
         </button>
         <input

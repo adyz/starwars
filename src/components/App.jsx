@@ -1,6 +1,9 @@
 import React from 'react';
 import './app.scss';
-import { Router, Link } from '@reach/router';
+import {
+  Link, Routes, Route,
+} from 'react-router-dom';
+
 import Logo from '../assets/logo_wide.svg';
 import PageSearch from './PageSearch';
 import PageFilm from './PageFilm';
@@ -14,11 +17,10 @@ function App() {
           <span className="logo__text">Search Engine</span>
         </Link>
       </header>
-      <Router>
-        <PageSearch path="/" />
-        <PageFilm path="film/:filmId" />
-      </Router>
-
+      <Routes>
+        <Route element={<PageSearch />} path="/" />
+        <Route element={<PageFilm />} path="film/:filmId" />
+      </Routes>
     </div>
   );
 }

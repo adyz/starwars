@@ -1,10 +1,10 @@
 import React from 'react';
-import { navigate } from '@reach/router';
+import { useParams } from 'react-router-dom';
 import API, { getID, controller } from '../utils/starWarsApi';
 import IconBack from '../assets/back.svg';
 
 function goBack() {
-  navigate(-1);
+  window.history.back();
 }
 
 async function getCharacters(characters) {
@@ -20,8 +20,8 @@ async function getCharacters(characters) {
   }));
 }
 
-// eslint-disable-next-line react/prop-types
-function PageFilm({ filmId }) {
+function PageFilm() {
+  const { filmId } = useParams();
   const [state, setState] = React.useState({
     fetchState: 'idle',
     data: [],
@@ -35,6 +35,9 @@ function PageFilm({ filmId }) {
 
     try {
       const filmData = await API.getFilm(filmId);
+      if (!filmData.characters) {
+        throw new Error('No data');
+      }
       const characters = await getCharacters(filmData.characters);
       setState({
         fetchState: 'fulfilled',
@@ -71,18 +74,13 @@ function PageFilm({ filmId }) {
       </button>
       <div className="filmContent">
         {state.fetchState === 'pending' && (
-        <>
-          <p>Loading...</p>
-        </>
+        <p>Loading...</p>
         )}
         {state.fetchState === 'error' && (
-        <>
-          <p>
-            Loading failed
-            {' '}
-            <button type="button" onClick={getFilmData}>Retry</button>
-          </p>
-        </>
+        <p>
+          Loading failed
+          <button type="button" onClick={getFilmData}>Retry</button>
+        </p>
         )}
         {state.fetchState === 'fulfilled' && (
         <>

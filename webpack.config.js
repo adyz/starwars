@@ -4,6 +4,11 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.jsx',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
+    filename: 'bundle.js',
+  },
   module: {
     rules: [
       {
@@ -28,14 +33,10 @@ module.exports = {
     ],
   },
   resolve: { extensions: ['*', '.js', '.jsx'] }, // allows import without file extension
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/',
-    filename: 'bundle.js',
-  },
+
   devServer: {
     port: 3000,
-    contentBase: path.resolve(__dirname, './dist'),
+    static: path.resolve(__dirname, './dist'),
     hot: true,
     open: true,
     historyApiFallback: {
