@@ -68,9 +68,6 @@ function PageFilm() {
 
   return (
     <div className="pageFilm">
-      <pre>
-        {JSON.stringify({ filmId }, null, 2)}
-      </pre>
       <button className="backButton" type="button" onClick={goBack}>
         <IconBack />
         Back
@@ -81,10 +78,7 @@ function PageFilm() {
         )}
         {state.fetchState === 'error' && (
         <p>
-          Loading failed (
-          {JSON.stringify(state.data)}
-          )
-          {' '}
+          Loading failed
           <button type="button" onClick={getFilmData}>Retry</button>
         </p>
         )}
