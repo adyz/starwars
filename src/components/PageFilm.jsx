@@ -1,10 +1,10 @@
 import React from 'react';
-import { navigate } from '@reach/router';
+import { useParams } from 'react-router-dom';
 import API, { getID, controller } from '../utils/starWarsApi';
 import IconBack from '../assets/back.svg';
 
 function goBack() {
-  navigate(-1);
+  window.history.back();
 }
 
 async function getCharacters(characters) {
@@ -20,8 +20,8 @@ async function getCharacters(characters) {
   }));
 }
 
-// eslint-disable-next-line react/prop-types
-function PageFilm({ filmId }) {
+function PageFilm() {
+  const { filmId } = useParams();
   const [state, setState] = React.useState({
     fetchState: 'idle',
     data: [],
@@ -35,12 +35,17 @@ function PageFilm({ filmId }) {
 
     try {
       const filmData = await API.getFilm(filmId);
+      console.log('FILM DATAAAAAA', filmData);
+      if (!filmData.characters) {
+        throw new Error('No data');
+      }
       const characters = await getCharacters(filmData.characters);
       setState({
         fetchState: 'fulfilled',
         data: { ...filmData, characters },
       });
     } catch (e) {
+      console.log('Error', JSON.stringify(e));
       if (e.name === 'AbortError') {
         console.log('Aborted');
       } else {
@@ -65,24 +70,25 @@ function PageFilm({ filmId }) {
 
   return (
     <div className="pageFilm">
+      <pre>
+        {JSON.stringify({ filmId }, null, 2)}
+      </pre>
       <button className="backButton" type="button" onClick={goBack}>
         <IconBack />
         Back
       </button>
       <div className="filmContent">
         {state.fetchState === 'pending' && (
-        <>
-          <p>Loading...</p>
-        </>
+        <p>Loading...</p>
         )}
         {state.fetchState === 'error' && (
-        <>
-          <p>
-            Loading failed
-            {' '}
-            <button type="button" onClick={getFilmData}>Retry</button>
-          </p>
-        </>
+        <p>
+          Loading failed (
+          {JSON.stringify(state.data)}
+          )
+          {' '}
+          <button type="button" onClick={getFilmData}>Retry</button>
+        </p>
         )}
         {state.fetchState === 'fulfilled' && (
         <>
