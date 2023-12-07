@@ -35,7 +35,6 @@ function PageFilm() {
 
     try {
       const filmData = await API.getFilm(filmId);
-      console.log('FILM DATAAAAAA', filmData);
       if (!filmData.characters) {
         throw new Error('No data');
       }
@@ -45,7 +44,6 @@ function PageFilm() {
         data: { ...filmData, characters },
       });
     } catch (e) {
-      console.log('Error', JSON.stringify(e));
       if (e.name === 'AbortError') {
         console.log('Aborted');
       } else {

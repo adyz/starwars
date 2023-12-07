@@ -62,9 +62,6 @@ function PageSearch() {
 
   return (
     <div className="pageSearch">
-      <pre>
-        {JSON.stringify({ query }, null, 2)}
-      </pre>
       <form className="searchForm" action="">
         <button aria-label="Search" className="searchForm__icon" type="submit">
           <IconSearch />

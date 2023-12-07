@@ -15,18 +15,15 @@ import PageSearch from './PageSearch';
 const urls = apiURLs();
 
 const server = setupServer(
-  http.get(urls.search('a'), () => {
-    console.log('REQ');
-    return HttpResponse.json({
-      count: 4,
-      next: null,
-      previous: null,
-      results: [{
-        title: 'Test title',
-        url: 'http://swapi.dev/api/films/1/',
-      }],
-    });
-  }),
+  http.get(urls.search('a'), () => HttpResponse.json({
+    count: 4,
+    next: null,
+    previous: null,
+    results: [{
+      title: 'Test title',
+      url: 'http://swapi.dev/api/films/1/',
+    }],
+  })),
 );
 
 beforeAll(() => server.listen());
@@ -48,13 +45,10 @@ it('Renders items when search', async () => {
 
 it('Renders error', async () => {
   server.use(
-    http.get(urls.search('a'), () => {
-      console.log('REQ');
-      return HttpResponse(null, {
-        status: 500,
-        statusText: 'Out Of Apples',
-      });
-    }),
+    http.get(urls.search('a'), () => HttpResponse(null, {
+      status: 500,
+      statusText: 'Out Of Apples',
+    })),
   );
   const { getByPlaceholderText, getByText } = render(<PageSearch />, { wrapper: BrowserRouter });
   const searchInput = getByPlaceholderText('Search for a movie title');

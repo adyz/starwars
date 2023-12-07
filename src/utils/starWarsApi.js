@@ -59,10 +59,7 @@ export function starWarsApi() {
   const urls = apiURLs();
   return {
     searchFilm: (query) => baseFetch(urls.search(query)),
-    getFilm: (id) => {
-      console.log('Getting film', urls.film(id));
-      return baseFetch(urls.film(id));
-    },
+    getFilm: (id) => baseFetch(urls.film(id)),
     getCharacter: (id) => baseFetch(urls.character(id)),
   };
 }

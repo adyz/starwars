@@ -19,7 +19,6 @@ const character1URL = urls.character('1');
 
 const server = setupServer(
   http.get(film1URL, () => {
-    console.log('HttpResponse for', film1URL);
     const res = HttpResponse.json({
       title: 'Test title',
       opening_crawl: 'It is a dark time',
@@ -30,7 +29,6 @@ const server = setupServer(
     return res;
   }),
   http.get(character1URL, () => {
-    console.log('HttpResponse for', character1URL);
     const res = HttpResponse.json({
       name: 'Luke Skywalker',
     });
@@ -50,13 +48,10 @@ it('Loads and renders film data', async () => {
 
 it('Renders error', async () => {
   server.use(
-    http.get(film1URL, () => {
-      console.log('REQ');
-      return HttpResponse(null, {
-        status: 500,
-        statusText: 'Out Of Apples',
-      });
-    }),
+    http.get(film1URL, () => HttpResponse(null, {
+      status: 500,
+      statusText: 'Out Of Apples',
+    })),
   );
   const { getByText } = render(<MemoryRouter initialEntries={['/film/1']}><Routes><Route element={<PageFilm />} path="film/:filmId" /></Routes></MemoryRouter>);
   await waitFor(() => getByText('Loading...'));
