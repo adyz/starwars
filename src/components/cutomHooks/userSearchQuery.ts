@@ -1,7 +1,13 @@
 import React from 'react';
 
-function useSearchQuery(initialValue = '') {
-  const [query, setQuety] = React.useState(() => {
+function useSearchQuery(initialValue = ''): [
+  string,
+  React.Dispatch<React.SetStateAction<string>>
+]
+  {
+  const [query, setQuery] = React.useState<
+    string
+  >(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const search = urlParams.get('search');
     return search || initialValue;
@@ -11,10 +17,10 @@ function useSearchQuery(initialValue = '') {
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('search', query);
     const newRelativePathQuery = `${window.location.pathname}?${urlParams.toString()}`;
-    window.history.replaceState(false, false, newRelativePathQuery);
+    window.history.replaceState(false, '', newRelativePathQuery);
   }, [query]);
 
-  return [query, setQuety];
+  return [query, setQuery];
 }
 
 export default useSearchQuery;

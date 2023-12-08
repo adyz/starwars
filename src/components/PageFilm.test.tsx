@@ -9,7 +9,7 @@ import { setupServer } from 'msw/node';
 import {
   MemoryRouter, Route, Routes,
 } from 'react-router-dom';
-import { apiURLs } from '../utils/starWarsApi';
+import { apiURLs } from '../api/starWarsApi';
 import PageFilm from './PageFilm';
 
 const urls = apiURLs();
@@ -48,7 +48,7 @@ it('Loads and renders film data', async () => {
 
 it('Renders error', async () => {
   server.use(
-    http.get(film1URL, () => HttpResponse(null, {
+    http.get(film1URL, () => new HttpResponse(null, {
       status: 500,
       statusText: 'Out Of Apples',
     })),

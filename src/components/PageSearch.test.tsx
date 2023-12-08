@@ -9,7 +9,7 @@ import { setupServer } from 'msw/node';
 import { beforeAll, afterEach, afterAll } from 'vitest';
 
 import { BrowserRouter } from 'react-router-dom';
-import { apiURLs } from '../utils/starWarsApi';
+import { apiURLs } from '../api/starWarsApi';
 import PageSearch from './PageSearch';
 
 const urls = apiURLs();
@@ -32,7 +32,7 @@ afterAll(() => server.close());
 
 it('Renders empty', async () => {
   const { getByPlaceholderText } = render(<PageSearch />, { wrapper: BrowserRouter });
-  const searchInput = getByPlaceholderText('Search for a movie title');
+  const searchInput = getByPlaceholderText('Search for a movie title') as HTMLInputElement
   expect(searchInput.value).toBe('');
 });
 
@@ -45,7 +45,7 @@ it('Renders items when search', async () => {
 
 it('Renders error', async () => {
   server.use(
-    http.get(urls.search('a'), () => HttpResponse(null, {
+    http.get(urls.search('a'), () => new HttpResponse(null, {
       status: 500,
       statusText: 'Out Of Apples',
     })),
@@ -53,10 +53,10 @@ it('Renders error', async () => {
   const { getByPlaceholderText, getByText } = render(<PageSearch />, { wrapper: BrowserRouter });
   const searchInput = getByPlaceholderText('Search for a movie title');
   fireEvent.change(searchInput, { target: { value: 'a' } });
-  await waitFor(() => getByText('Error showing search resuls'));
+  await waitFor(() => getByText('Error showing search results'));
 });
 
-it('Renders empty if no resuls returned from server', async () => {
+it('Renders empty if no results returned from server', async () => {
   server.use(
     http.get(urls.search('a'), () => HttpResponse.json({
       count: 0,
@@ -68,5 +68,5 @@ it('Renders empty if no resuls returned from server', async () => {
   const { getByPlaceholderText, getByText } = render(<PageSearch />, { wrapper: BrowserRouter });
   const searchInput = getByPlaceholderText('Search for a movie title');
   fireEvent.change(searchInput, { target: { value: 'a' } });
-  await waitFor(() => getByText('No resuls found for'));
+  await waitFor(() => getByText('No results found for'));
 });
