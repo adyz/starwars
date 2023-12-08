@@ -9,7 +9,7 @@ import { setupServer } from 'msw/node';
 import {
   MemoryRouter, Route, Routes,
 } from 'react-router-dom';
-import { apiURLs } from '../utils/starWarsApi';
+import { apiURLs } from '../api/starWarsApi';
 import PageFilm from './PageFilm';
 
 const urls = apiURLs();

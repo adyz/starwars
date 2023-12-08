@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useSearchQuery from './cutomHooks/userSearchQuery';
 import useDebounce from './cutomHooks/useDebounce';
-import API, { getID, controller, SearchResults } from '../utils/starWarsApi';
+import API, { getID, controller, SearchResults } from '../api/starWarsApi';
 
 import IconSearch from '../assets/search.svg';
 

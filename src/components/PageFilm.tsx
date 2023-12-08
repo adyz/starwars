@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import API, { getID, controller, FilmWithCharacters } from '../utils/starWarsApi';
+import API, { getID, controller, FilmWithCharacters } from '../api/starWarsApi';
 import IconBack from '../assets/back.svg';
 
 function goBack() {

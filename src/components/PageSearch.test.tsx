@@ -9,7 +9,7 @@ import { setupServer } from 'msw/node';
 import { beforeAll, afterEach, afterAll } from 'vitest';
 
 import { BrowserRouter } from 'react-router-dom';
-import { apiURLs } from '../utils/starWarsApi';
+import { apiURLs } from '../api/starWarsApi';
 import PageSearch from './PageSearch';
 
 const urls = apiURLs();
