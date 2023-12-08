@@ -9,7 +9,8 @@
     "start": "webpack serve --config ./webpack.config.js --mode development",
     "build": "webpack --mode production",
     "local-prod": "npm run build && serve dist",
-    "lint": "eslint src/**/*.jsx src/**/*.js"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src"
   },
   "repository": {
     "type": "git",
