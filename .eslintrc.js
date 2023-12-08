@@ -5,7 +5,6 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'airbnb',
     'plugin:react-hooks/recommended',
   ],
   parserOptions: {
@@ -18,8 +17,4 @@ module.exports = {
   plugins: [
     'react',
   ],
-  rules: {
-    'no-console': 'off',
-    'react/prop-types': ['warn', { ignore: ['children'] }],
-  },
 };
