@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import API, { getID, controller, type FilmWithCharacters } from '../api/starWarsApi'
+import API, { getID, abort, type FilmWithCharacters } from '../api/starWarsApi'
 import IconBack from '../assets/back.svg'
 
 function goBack () {
@@ -33,7 +33,6 @@ function PageFilm () {
         throw new Error('No data')
       }
       const characters = await API.getCharacters(filmData.characters.map(getID))
-      console.log('DONE', characters)
       setState({
         fetchState: 'fulfilled',
         data: { ...filmData, characters }
@@ -57,12 +56,15 @@ function PageFilm () {
   React.useEffect(() => {
     getFilmData()
     return () => {
-      if (controller) {
-        console.log('ABORT')
-        controller.abort()
+      if (abort) {
+        abort()
       }
     }
   }, [filmId, getFilmData])
+
+  const handleRetry = React.useCallback(() => {
+    getFilmData()
+  }, [getFilmData])
 
   return (
     <div className="pageFilm">
@@ -77,7 +79,7 @@ function PageFilm () {
         {state.fetchState === 'error' && (
         <p>
           Loading failed
-          <button type="button" onClick={getFilmData}>Retry</button>
+          <button type="button" onClick={handleRetry}>Retry</button>
         </p>
         )}
         {state.fetchState === 'fulfilled' && state.data && (
