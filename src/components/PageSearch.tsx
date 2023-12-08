@@ -3,7 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import useSearchQuery from './customHooks/userSearchQuery'
 import useDebounce from './customHooks/useDebounce'
-import API, { getID, controller, type SearchResults } from '../api/starWarsApi'
+import API, { getID, abort, type SearchResults } from '../api/starWarsApi'
 
 import IconSearch from '../assets/search.svg'
 
@@ -46,8 +46,8 @@ function PageSearch () {
   }, [debouncedQuery])
 
   React.useEffect(() => {
-    if (controller) {
-      controller.abort()
+    if (abort) {
+      abort()
     }
     if (debouncedQuery) {
       getSearchData()
@@ -60,8 +60,8 @@ function PageSearch () {
   }, [getSearchData, debouncedQuery])
 
   React.useEffect(() => () => {
-    if (controller) {
-      controller.abort()
+    if (abort) {
+      abort()
     }
   }, [])
 

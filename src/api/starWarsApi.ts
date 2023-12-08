@@ -1,9 +1,11 @@
 let controller: AbortController | null = null
-let signal
+let signal: AbortSignal | null = null
 
 export async function baseFetch (url: string, config = {}): Promise<any> {
-  controller = new AbortController()
-  signal = controller.signal
+  if (!controller) {
+    controller = new AbortController()
+    signal = controller.signal
+  }
   const newConf = {
     method: 'GET',
     signal,
@@ -65,18 +67,10 @@ export interface FilmCharacter {
 
 export interface Film {
   title: string
-  episode_id: number
   opening_crawl: string
   director: string
-  producer: string
   release_date: string
   characters: string[]
-  planets: string[]
-  starships: string[]
-  vehicles: string[]
-  species: string[]
-  created: string
-  edited: string
   url: string
 }
 
@@ -108,12 +102,7 @@ export function starWarsApi (): {
     },
     getCharacters: async (characters: string[]): Promise<FilmCharacter[]> => {
       const promises = characters.map(character => starWarsApi().getCharacter(character))
-      try {
-        return await Promise.all(promises)
-      } catch (e) {
-        console.error(e)
-        return []
-      }
+      return await Promise.all(promises)
     }
   }
 }
@@ -122,4 +111,10 @@ const API = starWarsApi()
 
 export default API
 
-export { controller }
+export function abort (): void {
+  if (controller) {
+    controller.abort()
+    controller = null
+    signal = null
+  }
+}
