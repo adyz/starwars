@@ -1,69 +1,68 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import API, { getID, controller, FilmWithCharacters } from '../api/starWarsApi';
-import IconBack from '../assets/back.svg';
+import React from 'react'
+import { useParams } from 'react-router-dom'
+import API, { getID, controller, type FilmWithCharacters } from '../api/starWarsApi'
+import IconBack from '../assets/back.svg'
 
-function goBack() {
-  window.history.back();
+function goBack () {
+  window.history.back()
 }
 
-function PageFilm() {
-  const { filmId } = useParams();
+function PageFilm () {
+  const { filmId } = useParams()
   const [state, setState] = React.useState<{
-    fetchState: 'idle' | 'pending' | 'fulfilled' | 'error';
+    fetchState: 'idle' | 'pending' | 'fulfilled' | 'error'
     data: FilmWithCharacters | null
   }>({
     fetchState: 'idle',
-    data: null,
-  });
-
-  if(!filmId) {
-    return <p>Invalid film ID</p>;
-  }
+    data: null
+  })
 
   const getFilmData = React.useCallback(async () => {
     setState({
       fetchState: 'pending',
-      data: null,
-    });
+      data: null
+    })
+
+    if (!filmId) {
+      return
+    }
 
     try {
-      const filmData = await API.getFilm(filmId);
+      const filmData = await API.getFilm(filmId)
       if (!filmData.characters) {
-        throw new Error('No data');
+        throw new Error('No data')
       }
-      const characters = await API.getCharacters(filmData.characters.map(getID));
+      const characters = await API.getCharacters(filmData.characters.map(getID))
+      console.log('DONE', characters)
       setState({
         fetchState: 'fulfilled',
-        data: { ...filmData, characters },
-      });
+        data: { ...filmData, characters }
+      })
     } catch (err) {
       if (err instanceof Error) {
-        if(err.name === 'AbortError') {
-          console.log('Aborted');
-        }
-        else {
+        if (err.name === 'AbortError') {
+          console.log('Aborted')
+        } else {
           setState({
             fetchState: 'error',
-            data: null,
-          });
+            data: null
+          })
         }
       } else {
-        throw err;
+        throw err
       }
     }
-  }, [filmId]);
+  }, [filmId])
 
   React.useEffect(() => {
-    if (filmId) {
-      getFilmData();
-    }
+    getFilmData()
     return () => {
       if (controller) {
-        controller.abort();
+        console.log('ABORT')
+        controller.abort()
       }
-    };
-  }, [filmId, getFilmData]);
+    }
+  }, [filmId, getFilmData])
 
   return (
     <div className="pageFilm">
@@ -102,14 +101,14 @@ function PageFilm() {
                   {state.data && state.data.characters.length - 1 === index ? '' : ','}
                   {' '}
                 </span>
-              ),
+              )
             )}
           </p>
         </>
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default PageFilm;
+export default PageFilm

@@ -1,69 +1,69 @@
-import React from 'react';
+import React from 'react'
 
-import { Link } from 'react-router-dom';
-import useSearchQuery from './cutomHooks/userSearchQuery';
-import useDebounce from './cutomHooks/useDebounce';
-import API, { getID, controller, SearchResults } from '../api/starWarsApi';
+import { Link } from 'react-router-dom'
+import useSearchQuery from './customHooks/userSearchQuery'
+import useDebounce from './customHooks/useDebounce'
+import API, { getID, controller, type SearchResults } from '../api/starWarsApi'
 
-import IconSearch from '../assets/search.svg';
+import IconSearch from '../assets/search.svg'
 
-function PageSearch() {
-  const [query, setQuery] = useSearchQuery('');
+function PageSearch () {
+  const [query, setQuery] = useSearchQuery('')
   const [state, setState] = React.useState<
-    {
-      fetchState: 'idle' | 'pending' | 'fullfilled' | 'error';
-      data: SearchResults | null
-    }
+  {
+    fetchState: 'idle' | 'pending' | 'fulfilled' | 'error'
+    data: SearchResults | null
+  }
   >({
     fetchState: 'idle',
-    data: null,
-  });
+    data: null
+  })
 
-  const debouncedQuery = useDebounce(query, 200);
+  const debouncedQuery = useDebounce(query, 200)
 
   const getSearchData = React.useCallback(() => {
     setState({
       fetchState: 'pending',
-      data: null,
-    });
+      data: null
+    })
 
     API.searchFilm(debouncedQuery)
       .then((json) => {
         setState({
-          fetchState: 'fullfilled',
-          data: json,
-        });
+          fetchState: 'fulfilled',
+          data: json
+        })
       }).catch((e) => {
         if (e.name === 'AbortError') {
-          console.log('Aborted');
+          console.log('Aborted')
         } else {
           setState({
             fetchState: 'error',
-            data: null,
-          });
+            data: null
+          })
         }
-      });
-  }, [debouncedQuery]);
+      })
+  }, [debouncedQuery])
 
   React.useEffect(() => {
     if (controller) {
-      controller.abort();
+      controller.abort()
     }
     if (debouncedQuery) {
-      getSearchData();
+      getSearchData()
     } else {
       setState({
         fetchState: 'idle',
-        data: null,
-      });
+        data: null
+      })
     }
-  }, [getSearchData, debouncedQuery]);
+  }, [getSearchData, debouncedQuery])
 
   React.useEffect(() => () => {
     if (controller) {
-      controller.abort();
+      controller.abort()
     }
-  }, []);
+  }, [])
 
   return (
     <div className="pageSearch">
@@ -75,7 +75,7 @@ function PageSearch() {
           className="searchForm__input"
           type="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => { setQuery(e.target.value) }}
           placeholder="Search for a movie title"
         />
       </form>
@@ -103,12 +103,12 @@ function PageSearch() {
         </p>
         )}
         {query && state?.data?.results?.map((film) => {
-          const filmId = getID(film.url);
-          return <Link key={film.title} to={`/film/${filmId}`} className="searchResults__item">{film.title}</Link>;
+          const filmId = getID(film.url)
+          return <Link key={film.title} to={`/film/${filmId}`} className="searchResults__item">{film.title}</Link>
         })}
       </div>
     </div>
-  );
+  )
 }
 
-export default PageSearch;
+export default PageSearch

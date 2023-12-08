@@ -1,15 +1,15 @@
 import React from 'react'
-import './app.scss';
+import './app.scss'
 import {
-  Link, Routes, Route,
-} from 'react-router-dom';
+  Link, Routes, Route
+} from 'react-router-dom'
 
-import Logo from '../assets/logo_wide.svg';
-import PageSearch from './PageSearch';
-import PageFilm from './PageFilm';
+import Logo from '../assets/logo_wide.svg'
+import PageSearch from './PageSearch'
+import PageFilm from './PageFilm'
 
-function App() {
-  const test = 1;
+function App () {
+  const test = 1
   return (
     <div className="wrapper">
       <header>
@@ -20,11 +20,11 @@ function App() {
       </header>
       <Routes>
         <Route element={<PageSearch />} path="/" />
-        <Route element={<PageFilm />} path="film/:filmId" 
+        <Route element={<PageFilm />} path="film/:filmId"
           />
       </Routes>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
