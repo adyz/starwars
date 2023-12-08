@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import './app.scss';
 import {
   Link, Routes, Route,
@@ -9,6 +9,7 @@ import PageSearch from './PageSearch';
 import PageFilm from './PageFilm';
 
 function App() {
+  const test = 1;
   return (
     <div className="wrapper">
       <header>
@@ -19,7 +20,8 @@ function App() {
       </header>
       <Routes>
         <Route element={<PageSearch />} path="/" />
-        <Route element={<PageFilm />} path="film/:filmId" />
+        <Route element={<PageFilm />} path="film/:filmId" 
+          />
       </Routes>
     </div>
   );

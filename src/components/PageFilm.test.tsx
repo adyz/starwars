@@ -48,7 +48,7 @@ it('Loads and renders film data', async () => {
 
 it('Renders error', async () => {
   server.use(
-    http.get(film1URL, () => HttpResponse(null, {
+    http.get(film1URL, () => new HttpResponse(null, {
       status: 500,
       statusText: 'Out Of Apples',
     })),

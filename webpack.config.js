@@ -1,9 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 
 module.exports = {
-  entry: './src/index.jsx',
+  entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/',
@@ -12,9 +14,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.[jt]sx?$/,
         exclude: /(node_modules)/,
-        loader: 'babel-loader',
+        loader: 'esbuild-loader',
+        options: {
+          tsconfig: './tsconfig.json',
+        },
       },
       {
         test: /\.scss$/,
@@ -32,7 +37,7 @@ module.exports = {
       },
     ],
   },
-  resolve: { extensions: ['*', '.js', '.jsx'] }, // allows import without file extension
+  resolve: { extensions: ['*', '.js', '.jsx', '.ts', '.tsx'] }, // allows import without file extension
 
   devServer: {
     port: 3000,
@@ -48,5 +53,7 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: './src/index.html',
       filename: './index.html',
-    })],
+    }),
+    new ForkTsCheckerWebpackPlugin(),
+  ],
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Copied from https://dev.to/gabe_ragland/debouncing-with-react-hooks-jci
-export default function useDebounce(value, delay) {
+export default function useDebounce(value: string, delay: number) {
   // State and setters for debounced value
   const [debouncedValue, setDebouncedValue] = React.useState(value);
 

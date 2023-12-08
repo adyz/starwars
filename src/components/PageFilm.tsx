@@ -1,36 +1,30 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import API, { getID, controller } from '../utils/starWarsApi';
+import API, { getID, controller, FilmWithCharacters } from '../utils/starWarsApi';
 import IconBack from '../assets/back.svg';
 
 function goBack() {
   window.history.back();
 }
 
-async function getCharacters(characters) {
-  return Promise.all(characters.map((url) => {
-    const id = getID(url);
-    return new Promise((res, rej) => {
-      API.getCharacter(id).then((data) => {
-        res(data);
-      }).catch((e) => {
-        rej(e);
-      });
-    });
-  }));
-}
-
 function PageFilm() {
   const { filmId } = useParams();
-  const [state, setState] = React.useState({
+  const [state, setState] = React.useState<{
+    fetchState: 'idle' | 'pending' | 'fulfilled' | 'error';
+    data: FilmWithCharacters | null
+  }>({
     fetchState: 'idle',
-    data: [],
+    data: null,
   });
+
+  if(!filmId) {
+    return <p>Invalid film ID</p>;
+  }
 
   const getFilmData = React.useCallback(async () => {
     setState({
       fetchState: 'pending',
-      data: [],
+      data: null,
     });
 
     try {
@@ -38,19 +32,24 @@ function PageFilm() {
       if (!filmData.characters) {
         throw new Error('No data');
       }
-      const characters = await getCharacters(filmData.characters);
+      const characters = await API.getCharacters(filmData.characters.map(getID));
       setState({
         fetchState: 'fulfilled',
         data: { ...filmData, characters },
       });
-    } catch (e) {
-      if (e.name === 'AbortError') {
-        console.log('Aborted');
+    } catch (err) {
+      if (err instanceof Error) {
+        if(err.name === 'AbortError') {
+          console.log('Aborted');
+        }
+        else {
+          setState({
+            fetchState: 'error',
+            data: null,
+          });
+        }
       } else {
-        setState({
-          fetchState: 'error',
-          data: e.message,
-        });
+        throw err;
       }
     }
   }, [filmId]);
@@ -82,7 +81,7 @@ function PageFilm() {
           <button type="button" onClick={getFilmData}>Retry</button>
         </p>
         )}
-        {state.fetchState === 'fulfilled' && (
+        {state.fetchState === 'fulfilled' && state.data && (
         <>
           <h1 className="filmTitle">{state.data.title}</h1>
           <p className="filmCrawl">{state.data.opening_crawl}</p>
@@ -100,7 +99,7 @@ function PageFilm() {
               (character, index) => (
                 <span key={character.name}>
                   {character.name}
-                  {state.data.characters.length - 1 === index ? '' : ','}
+                  {state.data && state.data.characters.length - 1 === index ? '' : ','}
                   {' '}
                 </span>
               ),

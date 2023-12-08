@@ -4,5 +4,11 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './components/App';
 
 // Render your React component instead
-const root = createRoot(document.getElementById('star-wars-root'));
+const rootEl = document.getElementById('star-wars-root');
+
+if (!rootEl) {
+  throw new Error('Could not find root element');
+}
+
+const root = createRoot(rootEl);
 root.render(<BrowserRouter><App /></BrowserRouter>);
