@@ -107,9 +107,13 @@ export function starWarsApi (): {
       return await baseFetch(urls.character(id))
     },
     getCharacters: async (characters: string[]): Promise<FilmCharacter[]> => {
-      const promises = characters.map(async (character) => await starWarsApi().getCharacter(character))
-      const data = await Promise.all(promises)
-      return data
+      const promises = characters.map(character => starWarsApi().getCharacter(character))
+      try {
+        return await Promise.all(promises)
+      } catch (e) {
+        console.error(e)
+        return []
+      }
     }
   }
 }
