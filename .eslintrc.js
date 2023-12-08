@@ -4,12 +4,9 @@ module.exports = {
         "es2021": true
     },
     "extends": [
-        "plugin:react/recommended",
         "standard-with-typescript",
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
-    ],
-    "overrides": [
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -18,6 +15,4 @@ module.exports = {
     "plugins": [
         "react"
     ],
-    "rules": {
-    }
 }
